@@ -1,5 +1,5 @@
 using Scalar.AspNetCore;
-using SurveyBasketV9.Api.Middleware;
+using SurveyBasketV9.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,18 +18,18 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
-
-//app.UseCustomMiddleware();
-
 //app.Use(async (context, next) =>
 //{
-//    Console.WriteLine("This is my request");
+//    Console.WriteLine("Request Log");
 
-//    await next(context);
+//    await next.Invoke(context);
 
-//    Console.WriteLine("This is my response");
+//    Console.WriteLine("Response Log");
 //});
+
+//app.UseLog();
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
