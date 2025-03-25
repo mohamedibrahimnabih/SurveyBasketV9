@@ -1,11 +1,15 @@
-﻿using Mapster;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SurveyBasketV9.Api.DTOs.Requests;
 using SurveyBasketV9.Api.DTOs.Responses;
 using SurveyBasketV9.Api.Mapping;
 using SurveyBasketV9.Api.Models;
 using SurveyBasketV9.Api.Services.IServices;
+using SurveyBasketV9.Api.Validations;
 
 namespace SurveyBasketV9.Api.Controllers
 {
@@ -42,8 +46,23 @@ namespace SurveyBasketV9.Api.Controllers
         }
 
         [HttpPost("")]
-        public IActionResult Create([FromBody] PollRequest poll)
+        public IActionResult Create([FromBody] PollRequest poll/*, [FromServices] IValidator<PollRequest> validator*/)
         {
+            //if (!ModelState.IsValid)
+            //    return ValidationProblem(ModelState);
+
+            //ValidationResult results = validator.Validate(poll);
+
+            //if (!results.IsValid)
+            //{
+            //    foreach (var failure in results.Errors)
+            //    {
+            //        ModelStateDictionary errors = new();
+            //        errors.AddModelError(failure.PropertyName, failure.ErrorMessage);
+            //        return ValidationProblem(errors);
+            //    }
+            //}
+
             var pollCreated = _pollService.Add(poll.Adapt<Poll>());
             return CreatedAtAction(nameof(GetById), new { id = pollCreated.Id }, pollCreated);
         }
